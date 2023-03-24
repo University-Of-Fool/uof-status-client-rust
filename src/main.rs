@@ -15,13 +15,7 @@ async fn main() {
     {
         println!("{:#?}", res);
     }*/
-    let res = new_server(
-        "https://status.uof.edu.kg",
-        "aaabbbaaa",
-        "Test",
-        "A test server",
-    )
-    .await;
+    let res = new_server("http://127.0.0.1", "aaabbbaaa", "Test1", "A test server").await;
 
     println!("{:#?}", res);
 }

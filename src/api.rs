@@ -17,7 +17,6 @@ pub async fn new_server(
     description: &str,
 ) -> Result<HashMap<String, Value>, reqwest::Error> {
     let client = reqwest::Client::new();
-
     let urls: String = format!("{}/api/server/put", url);
     let tokens: String = format!("\"{}\"", token);
     let names: String = format!("\"{}\"", name);
