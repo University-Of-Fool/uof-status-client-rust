@@ -23,4 +23,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: uof-status
-          path: target\debug\uof-status
+          path: target/debug/deps/uof_status*
