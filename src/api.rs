@@ -1,6 +1,6 @@
 use reqwest::header::HeaderMap;
-use serde_json::{value::Value, json};
-use std::{collections::HashMap, fmt::format};
+use serde_json::{json, value::Value};
+use std::collections::HashMap;
 
 //获取服务器列表
 pub async fn get_list(url: &str) -> Result<HashMap<String, String>, reqwest::Error> {
@@ -51,7 +51,7 @@ pub async fn put_server(
 pub async fn drop_server(
     url: &str,
     token: &str,
-    id: u64
+    id: u64,
 ) -> Result<HashMap<String, Value>, reqwest::Error> {
     let client = reqwest::Client::new();
     let urls: String = format!("{}/api/server/drop", url);
@@ -78,7 +78,7 @@ pub async fn put_status(
     url: &str,
     token: &str,
     id: u64,
-    online: bool
+    online: bool,
 ) -> Result<HashMap<String, Value>, reqwest::Error> {
     let client = reqwest::Client::new();
     let urls: String = format!("{}/api/status/put", url);
