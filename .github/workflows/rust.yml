@@ -20,7 +20,7 @@ jobs:
       - name: Run tests
         run: cargo test --verbose
       - name: Package the binary
-        run: mkdir optput/ && cp -f target/release/uof-status output/
+        run: mkdir output/ && cp -f target/release/uof-status output/
       - name: Release the binary
         uses: actions/upload-artifact@v3
         with:
