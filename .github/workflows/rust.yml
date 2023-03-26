@@ -16,11 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build
-        run: cargo build --verbose
+        run: cargo build --verbose --release
       - name: Run tests
         run: cargo test --verbose
       - name: Package the binary
-        run: mkdir optput/ && cp -f target/debug/uof-status output/
+        run: mkdir optput/ && cp -f target/release/uof-status output/
       - name: Release the binary
         uses: actions/upload-artifact@v3
         with:
