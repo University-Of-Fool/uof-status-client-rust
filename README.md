@@ -10,8 +10,8 @@
 
 * [x] [uof-status-api](https://github.com/University-Of-Fool/uof-status/blob/main/APIREADME.md)
 * [ ] 解析命令行参数
-* [ ] 解析环境变量
+* [ ] 读取配置文件
 
 ## 未来可能加入的功能
 
-- [ ] 读取配置文件
+- [ ] 并行支持多服务器
