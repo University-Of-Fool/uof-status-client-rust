@@ -15,13 +15,15 @@ async fn main() {
     env::set_var("RUST_LOG", "info");
     env_logger::init();
 
+    let url = "http://127.0.0.1";
+    let token = "an1l7e3yk84p9bsc";
+    let id = 5;
+    let online = true;
     loop {
-        let res = put_status("http://127.0.0.1", "an1l7e3yk84p9bsc", 5, true).await;
-        info!("Uploading status.");
-        argument();
+        let res = put_status(url, token, id, online).await;
         match res {
-            Ok(v) => info!("Succeed: {v:?}"),
-            Err(e) => error!("Fail: {e:?}"),
+            Ok(v) => info!("Uploading status to {},Succeed: {v:?}", url),
+            Err(e) => error!("Uploading statusto {},Fail: {e:?}", url),
         }
         task::sleep(Duration::from_secs(5)).await;
     }
