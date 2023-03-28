@@ -158,10 +158,10 @@ struct Inquire {
 async fn main() {
     env::set_var("RUST_LOG", "info");
     env_logger::init();
-    let cli = Cli::parse().await;
+    let cli = Cli::parse();
 
     match &cli.command {
-        Commands::status(Status) => {
+        Some(Commands::status(Status)) => {
             let Status {
                 url,
                 token,
@@ -178,6 +178,7 @@ async fn main() {
                 task::sleep(Duration::from_secs(5)).await;
             }
         }
-        Some(_) => todo!(),
+        Some(Commands::put(Put)) => (),
+        None => todo!(),
     }
 }
