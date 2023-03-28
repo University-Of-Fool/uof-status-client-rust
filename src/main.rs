@@ -161,6 +161,8 @@ async fn main() {
     let cli = Cli::parse();
 
     match &cli.command {
+        Some(Commands::put(Put)) => (),
+        Some(Commands::drop(Drop)) => (),
         Some(Commands::status(Status)) => {
             let Status {
                 url,
@@ -178,7 +180,8 @@ async fn main() {
                 task::sleep(Duration::from_secs(5)).await;
             }
         }
-        Some(Commands::put(Put)) => (),
-        None => todo!(),
+        Some(Commands::list(List)) => (),
+        Some(Commands::inquire(Inquire)) => (),
+        None => (),
     }
 }
