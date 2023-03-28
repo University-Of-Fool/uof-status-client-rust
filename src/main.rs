@@ -1,10 +1,9 @@
-use async_std::task::{self, block_on};
-use clap::{arg, builder::Str, command, Args, Parser, Subcommand};
+use clap::{arg, command, Args, Parser, Subcommand};
+use colored::Colorize;
 use log::{error, info, warn};
-use std::env::args;
+use std::env;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
-use std::{env, str::FromStr};
 mod api;
 use api::{drop_server, get_list, get_status, put_server, put_status};
 extern crate clap;
@@ -20,7 +19,7 @@ struct Cli {
         short = 'c',
         long = "config",
         value_name = "FILE",
-        help = "Run with a configuration file"
+        help = "Run with a configuration file(default=./config.toml)"
     )]
     config: Option<PathBuf>,
 
@@ -30,19 +29,19 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Add a server to the primary server
-    put(Put),
-    /// Delete a server from the primary server
-    drop(Drop),
+    /// Add a server to the main server
+    put(put),
+    /// Delete a server from the main server
+    drop(drop),
     /// Start uploading status
-    status(Status),
+    status(status),
     /// Get a list of servers
-    list(List),
+    list(list),
     /// Query the server status
-    inquire(Inquire),
+    inquire(inquire),
 }
 #[derive(Args)]
-struct Put {
+struct put {
     #[arg(
         short = 'u',
         long = "url",
@@ -73,7 +72,7 @@ struct Put {
     description: String,
 }
 #[derive(Args)]
-struct Drop {
+struct drop {
     #[arg(
         short = 'u',
         long = "url",
@@ -97,7 +96,7 @@ struct Drop {
     id: u64,
 }
 #[derive(Args)]
-struct Status {
+struct status {
     #[arg(
         short = 'u',
         long = "url",
@@ -128,7 +127,7 @@ struct Status {
     offline: bool,
 }
 #[derive(Args)]
-struct List {
+struct list {
     #[arg(
         short = 'u',
         long = "url",
@@ -138,7 +137,7 @@ struct List {
     url: String,
 }
 #[derive(Args)]
-struct Inquire {
+struct inquire {
     #[arg(
         short = 'u',
         long = "url",
@@ -155,55 +154,62 @@ struct Inquire {
     id: u64,
 }
 
-async fn async_main() {
+#[tokio::main]
+async fn main() {
     env::set_var("RUST_LOG", "info");
     env_logger::init();
     let cli = Cli::parse();
 
     match &cli.command {
-        Some(Commands::put(Put)) => {
-            let Put {
+        Some(Commands::put(put)) => {
+            let put {
                 url,
                 token,
                 name,
-                description
-            } = Put;
-            let res = put_server(&url, &token, name, &description).await;
+                description,
+            } = put;
+            let res = put_server(&url, &token, &name, &description).await;
             match res {
                 Ok(v) => {
-                    warn!("NOTE: SUCCESSFULLY PUT SERVER:");
-                    warn!("\n\n{v:?}\n");
-                    warn!("THE INFORMATION GIVEN ABOVE WILL");
-                    warn!("BE ONLY DISPLAYED ONCE, PLEASE SAVE");
-                    warn!("THEM - ESPECIALLY THE TOKEN - CAREFULLY.");
-                },
+                    println!("{}", "NOTE: SUCCESSFULLY PUT SERVER:".yellow().bold());
+                    println!("\n{v:?}\n");
+                    println!("{}", "THE INFORMATION GIVEN ABOVE WILL".yellow().bold());
+                    println!("{}", "BE ONLY DISPLAYED ONCE, PLEASE SAVE".yellow().bold());
+                    println!(
+                        "{}",
+                        "THEM - ESPECIALLY THE TOKEN - CAREFULLY".yellow().bold()
+                    );
+                }
                 Err(e) => error!("Adding server to {},Fail: {e:?}", url),
             }
-        },
-        Some(Commands::drop(Drop)) => (),
-        Some(Commands::status(Status)) => {
-            let Status {
+        }
+        Some(Commands::drop(drop)) => {
+            let drop { url, token, id } = drop;
+            let res = drop_server(&url, &token, id.to_owned()).await;
+            match res {
+                Ok(v) => (),
+                Err(e) => (),
+            }
+        }
+        Some(Commands::status(status)) => {
+            let status {
                 url,
                 token,
                 id,
                 offline,
-            } = Status;
+            } = status;
             let online = !offline;
             loop {
                 let res = put_status(&url, &token, id.to_owned(), online).await;
                 match res {
-                    Ok(v) => info!("Uploading status to {},Succeed: {v:?}", url),
-                    Err(e) => error!("Uploading status to {},Fail: {e:?}", url),
+                    Ok(v) => info!("Uploading status to {} : {v:?}", url),
+                    Err(e) => error!("Uploading status to {},Fail : {e:?}", url),
                 }
-                task::sleep(Duration::from_secs(5)).await;
+                std::thread::sleep(Duration::from_secs(5));
             }
         }
-        Some(Commands::list(List)) => (),
-        Some(Commands::inquire(Inquire)) => (),
+        Some(Commands::list(list)) => (),
+        Some(Commands::inquire(inquire)) => (),
         None => (),
     }
-}
-
-fn main() {
-    block_on(async_main());
 }
