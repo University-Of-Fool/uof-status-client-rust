@@ -161,7 +161,25 @@ async fn async_main() {
     let cli = Cli::parse();
 
     match &cli.command {
-        Some(Commands::put(Put)) => (),
+        Some(Commands::put(Put)) => {
+            let Put {
+                url,
+                token,
+                name,
+                description
+            } = Put;
+            let res = put_server(&url, &token, name, &description).await;
+            match res {
+                Ok(v) => {
+                    warn!("NOTE: SUCCESSFULLY PUT SERVER:");
+                    warn!("\n\n{v:?}\n");
+                    warn!("THE INFORMATION GIVEN ABOVE WILL");
+                    warn!("BE ONLY DISPLAYED ONCE, PLEASE SAVE");
+                    warn!("THEM - ESPECIALLY THE TOKEN - CAREFULLY.");
+                },
+                Err(e) => error!("Adding server to {},Fail: {e:?}", url),
+            }
+        },
         Some(Commands::drop(Drop)) => (),
         Some(Commands::status(Status)) => {
             let Status {
@@ -175,7 +193,7 @@ async fn async_main() {
                 let res = put_status(&url, &token, id.to_owned(), online).await;
                 match res {
                     Ok(v) => info!("Uploading status to {},Succeed: {v:?}", url),
-                    Err(e) => error!("Uploading statusto {},Fail: {e:?}", url),
+                    Err(e) => error!("Uploading status to {},Fail: {e:?}", url),
                 }
                 task::sleep(Duration::from_secs(5)).await;
             }
