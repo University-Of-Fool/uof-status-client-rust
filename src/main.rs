@@ -1,4 +1,4 @@
-use async_std::task;
+use async_std::task::{self, block_on};
 use clap::{arg, builder::Str, command, Args, Parser, Subcommand};
 use log::{error, info, warn};
 use std::env::args;
@@ -155,7 +155,7 @@ struct Inquire {
     id: u64,
 }
 
-async fn main() {
+async fn async_main() {
     env::set_var("RUST_LOG", "info");
     env_logger::init();
     let cli = Cli::parse();
@@ -172,7 +172,7 @@ async fn main() {
             } = Status;
             let online = !offline;
             loop {
-                let res = put_status(&url, &token, id, online).await;
+                let res = put_status(&url, &token, id.to_owned(), online).await;
                 match res {
                     Ok(v) => info!("Uploading status to {},Succeed: {v:?}", url),
                     Err(e) => error!("Uploading statusto {},Fail: {e:?}", url),
@@ -184,4 +184,8 @@ async fn main() {
         Some(Commands::inquire(Inquire)) => (),
         None => (),
     }
+}
+
+fn main() {
+    block_on(async_main());
 }
