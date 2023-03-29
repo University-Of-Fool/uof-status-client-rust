@@ -29,5 +29,6 @@
 3. 构建
 
 ```
+git clone https://github.com/University-Of-Fool/uof-status-client-rust.git
 cargo build --release
 ```
