@@ -9,9 +9,25 @@
 - Deadline: **Apr.10th**
 
 * [x] [uof-status-api](https://github.com/University-Of-Fool/uof-status/blob/main/APIREADME.md)
-* [ ] 解析命令行参数
+* [x] 解析命令行参数
 * [ ] 读取配置文件
 
 ## 未来可能加入的功能
 
 - [ ] 并发支持多服务器
+
+## 目前遇到的问题
+
+- [ ] GET 请求无法正常处理 json
+
+## 构建
+
+1. 安装[Git](https://git-scm.com/)
+
+2. 安装[rustup](https://rustup.rs/)
+
+3. 构建
+
+```
+cargo build --release
+```

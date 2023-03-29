@@ -1,6 +1,7 @@
 use clap::{arg, command, Args, Parser, Subcommand};
 use colored::Colorize;
 use log::{error, info, warn};
+use serde_json::to_string;
 use std::env;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
@@ -30,18 +31,18 @@ struct Cli {
 #[derive(Subcommand)]
 enum Commands {
     /// Add a server to the main server
-    put(put),
+    Put(Put),
     /// Delete a server from the main server
-    drop(drop),
+    Drop(Drop),
     /// Start uploading status
-    status(status),
+    Status(Status),
     /// Get a list of servers
-    list(list),
+    List(List),
     /// Query the server status
-    inquire(inquire),
+    Inquire(Inquire),
 }
 #[derive(Args)]
-struct put {
+struct Put {
     #[arg(
         short = 'u',
         long = "url",
@@ -72,7 +73,7 @@ struct put {
     description: String,
 }
 #[derive(Args)]
-struct drop {
+struct Drop {
     #[arg(
         short = 'u',
         long = "url",
@@ -96,7 +97,7 @@ struct drop {
     id: u64,
 }
 #[derive(Args)]
-struct status {
+struct Status {
     #[arg(
         short = 'u',
         long = "url",
@@ -125,9 +126,16 @@ struct status {
         help = "Upload offline status"
     )]
     offline: bool,
+    #[arg(
+        short = 's',
+        long = "seconds",
+        value_name = "TIME",
+        help = "Set the interval,the unit is seconds(default=60)"
+    )]
+    seconds: u64,
 }
 #[derive(Args)]
-struct list {
+struct List {
     #[arg(
         short = 'u',
         long = "url",
@@ -137,7 +145,7 @@ struct list {
     url: String,
 }
 #[derive(Args)]
-struct inquire {
+struct Inquire {
     #[arg(
         short = 'u',
         long = "url",
@@ -161,8 +169,8 @@ async fn main() {
     let cli = Cli::parse();
 
     match &cli.command {
-        Some(Commands::put(put)) => {
-            let put {
+        Some(Commands::Put(put)) => {
+            let Put {
                 url,
                 token,
                 name,
@@ -172,47 +180,104 @@ async fn main() {
             match res {
                 Ok(v) => {
                     if v.get("success").unwrap() == true {
-                        let _id = v.get("id");
-                        let _token = v.get("token");
+                        let _id = to_string(&v.get("id")).unwrap();
+                        let _token = to_string(&v.get("token")).unwrap();
+                        let _token_len = to_string(&v.get("token")).unwrap().len() - 1;
                         println!("{}", "NOTE: SUCCESSFULLY PUT SERVER:".yellow().bold());
-                        println!("\nServer ID: {:?}\nServer Token: {:?}\n", _id, _token);
+                        println!(
+                            "\n{} {:?}\n{} {:?}\n",
+                            "Server ID:".blue().bold(),
+                            &_id,
+                            "Server token:".blue().bold(),
+                            &_token[1.._token_len]
+                        );
                         println!("{}", "THE INFORMATION GIVEN ABOVE WILL".red().bold());
                         println!("{}", "BE ONLY DISPLAYED ONCE, PLEASE SAVE".red().bold());
-                        println!(
-                            "{}",
-                            "THEM - ESPECIALLY THE TOKEN - CAREFULLY".red().bold()
-                    )};
+                        println!("{}", "THEM - ESPECIALLY THE TOKEN - CAREFULLY".red().bold())
+                    } else {
+                        error!("Adding server to {},Fail: {v:?}", url)
+                    };
                 }
                 Err(e) => error!("Adding server to {},Fail: {e:?}", url),
             }
         }
-        Some(Commands::drop(drop)) => {
-            let drop { url, token, id } = drop;
+        Some(Commands::Drop(drop)) => {
+            let Drop { url, token, id } = drop;
             let res = drop_server(&url, &token, id.to_owned()).await;
             match res {
-                Ok(v) => (),
-                Err(e) => (),
+                Ok(v) => {
+                    if v.get("success").unwrap() == true {
+                        warn!(
+                            "Remove the server {} from {},{}",
+                            id,
+                            url,
+                            "Success".green().bold()
+                        )
+                    } else {
+                        error!(
+                            "Remove the server {} from {},{} {v:?}",
+                            id,
+                            url,
+                            "Fail:".red().bold()
+                        )
+                    };
+                }
+                Err(e) => error!(
+                    "Remove the server {} from {},{} {e:?}",
+                    id,
+                    url,
+                    "Fail:".red().bold()
+                ),
             }
         }
-        Some(Commands::status(status)) => {
-            let status {
+        Some(Commands::Status(status)) => {
+            let Status {
                 url,
                 token,
                 id,
                 offline,
+                seconds,
             } = status;
             let online = !offline;
             loop {
                 let res = put_status(&url, &token, id.to_owned(), online).await;
                 match res {
-                    Ok(v) => info!("Uploading status to {} : {v:?}", url),
-                    Err(e) => error!("Uploading status to {},Fail : {e:?}", url),
+                    Ok(v) => {
+                        if v.get("success").unwrap() == true {
+                            info!("Uploading status to {} : {}", url, "Success".green())
+                        } else {
+                            error!(
+                                "Uploading status to {},{} : {v:?}",
+                                url,
+                                "Fail".red().bold()
+                            )
+                        }
+                    }
+                    Err(e) => error!(
+                        "Uploading status to {},{} : {e:?}",
+                        url,
+                        "Fail".red().bold()
+                    ),
                 }
-                std::thread::sleep(Duration::from_secs(5));
+                std::thread::sleep(Duration::from_secs(seconds.to_owned()));
             }
         }
-        Some(Commands::list(list)) => (),
-        Some(Commands::inquire(inquire)) => (),
+        Some(Commands::List(list)) => {
+            let List { url } = list;
+            let res = get_list(url).await;
+            match res {
+                Ok(v) => println!("{v:?}"),
+                Err(e) => error!("Fail to get server list: {e:?}"),
+            }
+        }
+        Some(Commands::Inquire(inquire)) => {
+            let Inquire { url, id } = inquire;
+            let res = get_status(url, id.to_owned()).await;
+            match res {
+                Ok(v) => println!("{v:?}"),
+                Err(e) => error!("{e:?}"),
+            }
+        }
         None => (),
     }
 }
