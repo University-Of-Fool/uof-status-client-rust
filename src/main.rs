@@ -171,14 +171,17 @@ async fn main() {
             let res = put_server(&url, &token, &name, &description).await;
             match res {
                 Ok(v) => {
-                    println!("{}", "NOTE: SUCCESSFULLY PUT SERVER:".yellow().bold());
-                    println!("\n{v:?}\n");
-                    println!("{}", "THE INFORMATION GIVEN ABOVE WILL".yellow().bold());
-                    println!("{}", "BE ONLY DISPLAYED ONCE, PLEASE SAVE".yellow().bold());
-                    println!(
-                        "{}",
-                        "THEM - ESPECIALLY THE TOKEN - CAREFULLY".yellow().bold()
-                    );
+                    if v.get("success").unwrap() == true {
+                        let _id = v.get("id");
+                        let _token = v.get("token");
+                        println!("{}", "NOTE: SUCCESSFULLY PUT SERVER:".yellow().bold());
+                        println!("\nServer ID: {:?}\nServer Token: {:?}\n", _id, _token);
+                        println!("{}", "THE INFORMATION GIVEN ABOVE WILL".red().bold());
+                        println!("{}", "BE ONLY DISPLAYED ONCE, PLEASE SAVE".red().bold());
+                        println!(
+                            "{}",
+                            "THEM - ESPECIALLY THE TOKEN - CAREFULLY".red().bold()
+                    )};
                 }
                 Err(e) => error!("Adding server to {},Fail: {e:?}", url),
             }
