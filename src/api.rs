@@ -1,22 +1,22 @@
-use reqwest::header::HeaderMap;
+use reqwest::{header::HeaderMap};
 use serde_json::{json, value::Value};
 use std::collections::HashMap;
 
 //获取服务器列表
-pub async fn get_list(url: &str) -> Result<HashMap<String, String>, reqwest::Error> {
+pub async fn get_list(url: &str) -> Result<HashMap<String, Value>, reqwest::Error> {
     let urls = format!("{}/api/server/get", url);
     Ok(reqwest::get(urls)
         .await?
-        .json::<HashMap<String, String>>()
+        .json::<HashMap<String, Value>>()
         .await?)
 }
 
 //获取状态
-pub async fn get_status(url: &str, id: u64) -> Result<HashMap<String, String>, reqwest::Error> {
+pub async fn get_status(url: &str, id: u64) -> Result<HashMap<String, Value>, reqwest::Error> {
     let urls = format!("{}/api/status/get/{}", url, id);
     Ok(reqwest::get(urls)
         .await?
-        .json::<HashMap<String, String>>()
+        .json::<HashMap<String, Value>>()
         .await?)
 }
 

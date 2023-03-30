@@ -8,14 +8,13 @@ use std::time::Duration;
 mod api;
 mod config;
 use api::{drop_server, get_list, get_status, put_server, put_status};
-use config::{config, mkconfig};
 extern crate clap;
 extern crate log;
 
 #[derive(Parser)]
 #[command(name = "uof-status")]
 #[command(author = "UrsusFeline <ursusfeline07@gmail.com>")]
-#[command(version = "0.1.0")]
+#[command(version = "0.1.0-alpha")]
 #[command(about = "A client of uof-status written in rust", long_about = None)]
 struct Cli {
     #[arg(
@@ -179,7 +178,7 @@ async fn main() {
     let cli = Cli::parse();
 
     match &cli.config {
-        Some(path) => config(path.to_path_buf()),
+        Some(path) => config::config(path.to_path_buf()),
         None => match &cli.command {
             Some(Commands::Put(put)) => {
                 let Put {
@@ -204,10 +203,10 @@ async fn main() {
                                 "Server token:".blue().bold(),
                                 &_token[1.._token_len]
                             );
-                            /*match mkconfig {
-                                Some(_path) => mkconfig(_path),
+                            match mkconfig {
+                                Some(_path) => config::mkconfig((&_path).to_path_buf()),
                                 None => (),
-                            }*/
+                            }
                             println!("{}", "THE INFORMATION GIVEN ABOVE WILL".red().bold());
                             println!("{}", "BE ONLY DISPLAYED ONCE, PLEASE SAVE".red().bold());
                             println!("{}", "THEM - ESPECIALLY THE TOKEN - CAREFULLY".red().bold())
@@ -295,7 +294,7 @@ async fn main() {
                     Err(e) => error!("{e:?}"),
                 }
             }
-            None => config(Path::new("./status.toml").to_path_buf()),
+            None => config::config(Path::new("./status.toml").to_path_buf()),
         },
     }
 }
