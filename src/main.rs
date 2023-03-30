@@ -288,9 +288,23 @@ async fn main() {
             }
             Some(Commands::Inquire(inquire)) => {
                 let Inquire { url, id } = inquire;
-                let res = get_status(url, id.to_owned()).await;
+                let res = get_status(&url, id.to_owned()).await;
                 match res {
-                    Ok(v) => println!("{v:?}"),
+                    Ok(v) => {
+                        if v.get("success").unwrap() == true {
+                            println!("{}{}", "Server ID: ".blue(), v.get("serverId").unwrap());
+                            println!("{}{}", "   Online: ".blue(), v.get("status").unwrap());
+                            println!("{}{}", "     Time: ".blue(), v.get("time").unwrap())
+                        } else if v.get("success").unwrap() == false {
+                            error!(
+                                "{}{}",
+                                "Fail to get status, reason: ".red().bold(),
+                                v.get("reason").unwrap()
+                            )
+                        } else {
+                            error!("{v:?}")
+                        }
+                    }
                     Err(e) => error!("{e:?}"),
                 }
             }

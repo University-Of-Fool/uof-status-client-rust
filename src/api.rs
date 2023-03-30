@@ -1,4 +1,4 @@
-use reqwest::{header::HeaderMap};
+use reqwest::header::HeaderMap;
 use serde_json::{json, value::Value};
 use std::collections::HashMap;
 
