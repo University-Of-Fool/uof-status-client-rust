@@ -1,14 +1,23 @@
 use crate::api::put_status;
 use colored::Colorize;
 use log::{error, info};
-use serde_derive::Deserialize;
+use serde_derive::{Deserialize, Serialize};
 use std::fs::File;
 use std::io::prelude::*;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::time::Duration;
 
 #[derive(Deserialize)]
 struct Config {
+    url: String,
+    server_id: u64,
+    server_token: String,
+    time: u64,
+    online: bool,
+}
+
+#[derive(Serialize)]
+struct ConfigOut {
     url: String,
     server_id: u64,
     server_token: String,
@@ -61,10 +70,39 @@ pub async fn config(_path: PathBuf) {
     }
 }
 
-pub fn mkconfig(_path: PathBuf) {
-    println!(
-        "{}",
-        "The configuration file resolution function is not yet complete".yellow()
-    );
-    todo!()
+pub fn mkconfig(_path: PathBuf, url: &str, token: &str, id: u64) {
+    let config = ConfigOut {
+        url: url.to_owned(),
+        server_id: id,
+        server_token: token.to_owned(),
+        time: 60,
+        online: true,
+    };
+    let _toml = toml::to_string(&config).unwrap();
+    let mut _file = std::fs::File::create(&_path);
+    let mut _file = match _file {
+        Ok(f) => f,
+        Err(_) => {
+            println!(
+                "{} \"{}\" {}",
+                "Creat".red().bold(),
+                &_path.to_string_lossy(),
+                "failed!".red().bold()
+            );
+            File::create("").unwrap()
+        }
+    };
+    match _file.write_all(_toml.as_bytes()) {
+        Ok(_) => println!(
+            "{}\"{}\"",
+            "Successfully written to ",
+            &_path.to_string_lossy()
+        ),
+        Err(_) => println!(
+            "{} \"{}\" {}",
+            "Write".red().bold(),
+            &_path.to_string_lossy(),
+            "failed!".red().bold()
+        ),
+    };
 }

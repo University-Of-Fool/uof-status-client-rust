@@ -204,7 +204,12 @@ async fn main() {
                                 &_token[1.._token_len]
                             );
                             match mkconfig {
-                                Some(_path) => config::mkconfig((&_path).to_path_buf()),
+                                Some(_path) => config::mkconfig(
+                                    (&_path).to_path_buf(),
+                                    &url,
+                                    &_token,
+                                    _id.parse::<u64>().unwrap(),
+                                ),
                                 None => (),
                             }
                             println!("{}", "THE INFORMATION GIVEN ABOVE WILL".red().bold());
