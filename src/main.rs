@@ -282,7 +282,9 @@ async fn main() {
                 let List { url } = list;
                 let res = get_list(url).await;
                 match res {
-                    Ok(v) => println!("{v:?}"),
+                    Ok(v) => {
+                        println!("{}",v.replace("\"", " ").replace("},{", "\n\n").replace(",", "\n").replace("[{", "").replace("}]", "").yellow())
+                    },
                     Err(e) => error!("Fail to get server list: {e:?}"),
                 }
             }

@@ -3,11 +3,11 @@ use serde_json::{json, value::Value};
 use std::collections::HashMap;
 
 //获取服务器列表
-pub async fn get_list(url: &str) -> Result<HashMap<String, Value>, reqwest::Error> {
+pub async fn get_list(url: &str) -> Result<String, reqwest::Error> {
     let urls = format!("{}/api/server/get", url);
     Ok(reqwest::get(urls)
         .await?
-        .json::<HashMap<String, Value>>()
+        .text()
         .await?)
 }
 
