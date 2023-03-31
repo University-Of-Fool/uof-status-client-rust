@@ -178,7 +178,7 @@ async fn main() {
     let cli = Cli::parse();
 
     match &cli.config {
-        Some(path) => config::config(path.to_path_buf()),
+        Some(path) => config::config(path.to_path_buf()).await,
         None => match &cli.command {
             Some(Commands::Put(put)) => {
                 let Put {
@@ -283,8 +283,16 @@ async fn main() {
                 let res = get_list(url).await;
                 match res {
                     Ok(v) => {
-                        println!("{}",v.replace("\"", " ").replace("},{", "\n\n").replace(",", "\n").replace("[{", "").replace("}]", "").yellow())
-                    },
+                        println!(
+                            "{}",
+                            v.replace("\"", " ")
+                                .replace("},{", "\n\n")
+                                .replace(",", "\n")
+                                .replace("[{", "")
+                                .replace("}]", "")
+                                .yellow()
+                        )
+                    }
                     Err(e) => error!("Fail to get server list: {e:?}"),
                 }
             }
@@ -310,7 +318,7 @@ async fn main() {
                     Err(e) => error!("{e:?}"),
                 }
             }
-            None => config::config(Path::new("./status.toml").to_path_buf()),
+            None => config::config(Path::new("./status.toml").to_path_buf()).await,
         },
     }
 }
