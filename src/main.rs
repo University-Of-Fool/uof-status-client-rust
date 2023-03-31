@@ -207,7 +207,7 @@ async fn main() {
                                 Some(_path) => config::mkconfig(
                                     (&_path).to_path_buf(),
                                     &url,
-                                    &_token,
+                                    &_token[1.._token_len],
                                     _id.parse::<u64>().unwrap(),
                                 ),
                                 None => (),
