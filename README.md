@@ -30,7 +30,7 @@ online = true
 
 解决方法:检查 URL 的域名/IP 和协议是否正确,DNS 是否正常
 
-> 如果无法解决,可以将环境变量设置为`RUST_BACKTRACE=1`后运行，将输出提交到 issue
+> 如果无法解决,可以将环境变量设置为`RUST_BACKTRACE=1`后运行,将输出提交到 issue
 
 2. `reqwest::Error { kind: Decode, source: Error("expected value", line: 1, column: 1) }`
 
