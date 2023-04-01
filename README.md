@@ -100,7 +100,7 @@ systemctl enable --now --user status.service
 
 > 如果无法解决,可以提交错误的输出到 issue
 
-3. `{"reason": String("___<此处输出可能不同>___"), "success": Bool(false)}`
+3. `{"reason": String("<此处输出可能不同,一般包含故障原因>"), "success": Bool(false)}`
 
 一般原因:提供的 token 等信息错误
 
@@ -110,7 +110,7 @@ _注意:_
 
 _不要混淆`Api.global_token`与`Server token`_
 
-_第一个是`put`,`drop`这些管理操作使用的 Token,以 `md5` 储存在服务端配置文件中(注意**是 md5 不是明文**)_
+_第一个是`put`,`drop`这些管理操作使用的 Token,以 `md5` 储存在服务端配置文件中(注意**服务端配置文件中是 md5 不是明文,此处需要输入明文**)_
 
 _第二个是`status`上传状态使用的,在新建服务器后会生成_
 
