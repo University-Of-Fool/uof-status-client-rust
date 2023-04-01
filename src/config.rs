@@ -45,7 +45,7 @@ pub async fn config(_path: PathBuf) {
         Ok(c) => c,
         Err(e) => panic!("Error Reading file: {}", e),
     };
-    let url = format!("{}/api/status/put", _toml.url);
+    let url = format!("{}", _toml.url);
     loop {
         let res = put_status(&url, &_toml.server_token, _toml.server_id, _toml.online).await;
         match res {
