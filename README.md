@@ -22,6 +22,66 @@ time = 60
 online = true
 ```
 
+## 快捷的使用方式
+
+- 此处不包含服务端配置方法,服务端配置请看[uof-status](https://github.com/University-Of-Fool/uof-status)
+
+1. [下载](https://github.com/University-Of-Fool/uof-status-client-rust/releases)
+
+2. `chmod +x ./uof-status`(对于 Linux)
+
+3. 新建服务器
+
+```
+./uof-status put --url <服务端URL> --token <Api.global_token> --name <名称> --description <描述> --mkconfig
+```
+
+4. 运行(使用配置文件)
+
+```
+./uof-status
+```
+
+## 设置为系统服务
+
+- 在完成"快捷的使用方式"的步骤且正常运行后,Linux 用户可以继续下面的步骤设置为系统服务
+
+> 在 MS Windows 运行,这里不提供设置为服务的方法,可以尝试使用这个项目:[Windows Service Wrapper](https://github.com/winsw/winsw)
+
+5. 安装 uof-status 到合适的位置
+
+```
+mkdir -p ~/.local/bin
+mkdir -p ~/.config
+mkdir -p ~/.config/systemd/user/
+mv ./uof-status ~/.local/bin/uof-status
+mv ./status.toml ~./.config/status.toml
+```
+
+6. 添加 Systemd 配置文件
+
+- 编辑`~/.config/systemd/user/status.service`,写入以下内容
+
+```
+[Unit]
+Description=A client of uof-status written in rust.
+
+[Service]
+ExecStart=$HOME/.local/bin/uof-status --config $HOME/.config/status.toml
+
+[Install]
+WantedBy=multi-user.target
+```
+
+7. 启用服务
+
+```
+systemctl daemon-reload --user
+systemctl enable --now --user status.service
+```
+
+> 以上操作会使服务在用户登录时启用,用户退出时关闭,若要随系统运行,请运行`` sudo loginctl enable-linger `whoami`  ``
+
 # 错误排除
 
 1. 遇到带有`RUST_BACKTRACE=1`,`panic`的错误输出
