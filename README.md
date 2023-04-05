@@ -55,12 +55,14 @@ mkdir -p ~/.local/bin
 mkdir -p ~/.config
 mkdir -p ~/.config/systemd/user/
 mv ./uof-status ~/.local/bin/uof-status
-mv ./status.toml ~./.config/status.toml
+mv ./status.toml ~/.config/status.toml
 ```
 
 6. 添加 Systemd 配置文件
 
 - 编辑`~/.config/systemd/user/status.service`,写入以下内容
+
+>建议将$HOME替换为用户家目录路径
 
 ```
 [Unit]
