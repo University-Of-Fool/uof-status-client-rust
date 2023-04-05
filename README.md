@@ -33,7 +33,7 @@ online = true
 3. 新建服务器
 
 ```
-./uof-status put --url <服务端URL> --token <Api.global_token> --name <名称> --description <描述> --mkconfig
+./uof-status put --url <服务端URL> --token <Api.global_token> --name <名称> --description <描述> --mkconfig ./status.toml
 ```
 
 4. 运行(使用配置文件)
