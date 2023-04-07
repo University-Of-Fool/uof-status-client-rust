@@ -203,6 +203,9 @@ async fn main() {
                                 "Server token:".blue().bold(),
                                 &_token[1.._token_len]
                             );
+                            println!("{}", "THE INFORMATION GIVEN ABOVE WILL".red().bold());
+                            println!("{}", "BE ONLY DISPLAYED ONCE, PLEASE SAVE".red().bold());
+                            println!("{}", "THEM - ESPECIALLY THE TOKEN - CAREFULLY".red().bold());
                             match mkconfig {
                                 Some(_path) => config::mkconfig(
                                     (&_path).to_path_buf(),
@@ -212,9 +215,6 @@ async fn main() {
                                 ),
                                 None => (),
                             }
-                            println!("{}", "THE INFORMATION GIVEN ABOVE WILL".red().bold());
-                            println!("{}", "BE ONLY DISPLAYED ONCE, PLEASE SAVE".red().bold());
-                            println!("{}", "THEM - ESPECIALLY THE TOKEN - CAREFULLY".red().bold())
                         } else {
                             error!("Adding server to {},Fail: {v:?}", url)
                         };
