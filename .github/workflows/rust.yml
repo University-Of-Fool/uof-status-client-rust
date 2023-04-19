@@ -1,28 +1,95 @@
-name: Rust
-
+name: Linux x86_64 musl
 on:
   push:
     branches: ["main"]
   pull_request:
     branches: ["main"]
-
 env:
   CARGO_TERM_COLOR: always
-
+  BUILD_TARGET: x86_64-unknown-linux-gnu
+  BINARY_NAME: uof-status_x86_64-linux-gnu
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
-      - name: Build
-        run: cargo build --verbose --release
-      - name: Run tests
-        run: cargo test --verbose
-      - name: Package the binary
-        run: mkdir output/ && cp -f target/release/uof-status output/
-      - name: Release the binary
-        uses: actions/upload-artifact@v3
-        with:
-          name: uof-status
-          path: output/
+    - uses: actions/checkout@v3
+    - name: Build-gnu
+      uses: gmiam/rust-musl-action@master
+      with:
+        args: cargo build --target $BUILD_TARGET --release
+    - uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.BINARY_NAME }}
+        path: target/${{ env.BINARY_TARGET }}/release/uof-status*
+
+name: Linux x86_64 musl
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+env:
+  CARGO_TERM_COLOR: always
+  BUILD_TARGET: x86_64-unknown-linux-musl
+  BINARY_NAME: uof-status_x86_64-linux-musl
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build-musl
+      uses: gmiam/rust-musl-action@master
+      with:
+        args: cargo build --target $BUILD_TARGET --release
+    - uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.BINARY_NAME }}
+        path: target/${{ env.BINARY_TARGET }}/release/uof-status*
+
+name: Windows x86_64 msvc
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+env:
+  CARGO_TERM_COLOR: always
+  BUILD_TARGET: x86_64-pc-windows-msvc
+  BINARY_NAME: uof-status_x86_64-windows-msvc
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build-gnu
+      uses: gmiam/rust-musl-action@master
+      with:
+        args: cargo build --target $BUILD_TARGET --release
+    - uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.BINARY_NAME }}
+        path: target/${{ env.BINARY_TARGET }}/release/uof-status*
+
+name: Windows x86_64 gnu
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+env:
+  CARGO_TERM_COLOR: always
+  BUILD_TARGET: x86_64-pc-windows-gnu
+  BINARY_NAME: uof-status_x86_64-windows-gnu
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build-gnu
+      uses: gmiam/rust-musl-action@master
+      with:
+        args: cargo build --target $BUILD_TARGET --release
+    - uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.BINARY_NAME }}
+        path: target/${{ env.BINARY_TARGET }}/release/uof-status*
