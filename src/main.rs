@@ -14,7 +14,7 @@ extern crate log;
 #[derive(Parser)]
 #[command(name = "uof-status")]
 #[command(author = "UrsusFeline <ursusfeline07@gmail.com>")]
-#[command(version = "0.1.0-alpha")]
+#[command(version = "0.1.0")]
 #[command(about = "A client of uof-status written in rust", long_about = None)]
 struct Cli {
     #[arg(
