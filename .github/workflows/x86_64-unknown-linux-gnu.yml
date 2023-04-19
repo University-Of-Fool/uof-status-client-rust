@@ -14,9 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build-gnu
-      uses: gmiam/rust-musl-action@master
-      with:
-        args: cargo build --target=$BUILD_TARGET --release
+        run: cargo build --verbose --release --target=$BUILD_TARGET
     - uses: actions/upload-artifact@v3
       with:
         name: ${{ env.BINARY_NAME }}
