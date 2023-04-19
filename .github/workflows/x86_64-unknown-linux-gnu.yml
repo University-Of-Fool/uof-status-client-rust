@@ -16,7 +16,7 @@ jobs:
     - name: Build-gnu
       uses: gmiam/rust-musl-action@master
       with:
-        args: cargo build --target $BUILD_TARGET --release
+        args: cargo build --target=$BUILD_TARGET --release
     - uses: actions/upload-artifact@v3
       with:
         name: ${{ env.BINARY_NAME }}
