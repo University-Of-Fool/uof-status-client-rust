@@ -2,7 +2,7 @@
 # Build script for batch cross-compilation
 
 # Set build target
-TARGET=(x86_64-unknown-linux-gnu x86_64-unknown-linux-musl x86_64-pc-windows-gnu)
+TARGET=(x86_64-unknown-linux-gnu x86_64-unknown-linux-musl x86_64-pc-windows-gnu "aarch64-unknown-linux-gnu --no-default-features" "aarch64-unknown-linux-musl --no-default-features" "aarch64-pc-windows-gnu --no-default-features")
 OUTPUT_FILE=(uof-status uof-status.exe)
 
 # Check environment
