@@ -16,11 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build
-        run: cargo build --verbose --release
+        run: chmod +x build.sh && ./build.sh
       - name: Run tests
         run: cargo test --verbose
-      - name: Package the binary
-        run: chmod +x ./build.sh && ./build.sh
       - name: Release the binary
         uses: actions/upload-artifact@v3
         with:
