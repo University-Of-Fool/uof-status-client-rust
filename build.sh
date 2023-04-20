@@ -16,7 +16,7 @@ for BUILD_TARGET in ${TARGET[@]}; do
 	cross build --release --target=$BUILD_TARGET
 	mkdir output/$BUILD_TARGET
 	for FILE in ${OUTPUT_FILE[@]}; do
-		cp -rf target/$BUILD_TARGET/$FILE output/$BUILD_TARGET/$FILE
+		cp -rf target/$BUILD_TARGET/release/$FILE output/$BUILD_TARGET/$FILE
 	done
 done
 
@@ -25,6 +25,6 @@ for BUILD_TARGET_ in $*; do
 	cross build --release --target=$BUILD_TARGET_
 	mkdir output/$BUILD_TARGET_
 	for FILE in ${OUTPUT_FILE[@]}; do
-		cp -rf target/$BUILD_TARGET_/$FILE output/$BUILD_TARGET_/$FILE
+		cp -rf target/$BUILD_TARGET_/release/$FILE output/$BUILD_TARGET_/$FILE
 	done
 done
