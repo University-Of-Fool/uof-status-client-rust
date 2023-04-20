@@ -20,7 +20,7 @@ jobs:
       - name: Run tests
         run: cargo test --verbose
       - name: Package the binary
-        run: mkdir output/ && cp -f target/release/uof-status output/
+        run: chmod +x ./build.sh && ./build.sh
       - name: Release the binary
         uses: actions/upload-artifact@v3
         with:
