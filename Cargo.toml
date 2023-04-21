@@ -1,5 +1,5 @@
 [package]
-name = "uof-status"
+name = "ustatc"
 description = "A client of uof-status written in rust"
 documentation = "https://github.com/University-Of-Fool/uof-status-client-rust"
 version = "0.1.0"
