@@ -1,4 +1,4 @@
-# uof-status-client-rust
+# UOF/ustatc-rust
 
 一个用 Rust 编写的 [uof-status](https://github.com/University-Of-Fool/uof-status) 客户端。
 
@@ -7,7 +7,7 @@
 可以输入以下命令查看帮助
 
 ```
-uof-status --help
+ustatc --help
 ```
 
 > **警告：URL 最后不要带有`/`**
@@ -28,18 +28,18 @@ online = true
 
 1. [下载](https://github.com/University-Of-Fool/uof-status-client-rust/releases)
 
-2. `chmod +x ./uof-status`(对于 Linux)
+2. `chmod +x ./ustatc`(对于 Linux)
 
 3. 新建服务器
 
 ```
-./uof-status put --url <服务端URL> --token <Api.global_token> --name <名称> --description <描述> --mkconfig ./status.toml
+./ustatc put --url <服务端URL> --token <Api.global_token> --name <名称> --description <描述> --mkconfig ./status.toml
 ```
 
 4. 运行(使用配置文件)
 
 ```
-./uof-status
+./ustatc
 ```
 
 ## 设置为系统服务
@@ -54,7 +54,7 @@ online = true
 mkdir -p ~/.local/bin
 mkdir -p ~/.config
 mkdir -p ~/.config/systemd/user/
-mv ./uof-status ~/.local/bin/uof-status
+mv ./ustatc ~/.local/bin/ustatc
 mv ./status.toml ~/.config/status.toml
 ```
 
@@ -69,7 +69,7 @@ mv ./status.toml ~/.config/status.toml
 Description=A client of uof-status written in rust.
 
 [Service]
-ExecStart=$HOME/.local/bin/uof-status --config $HOME/.config/status.toml
+ExecStart=$HOME/.local/bin/ustatc --config $HOME/.config/status.toml
 
 [Install]
 WantedBy=multi-user.target
