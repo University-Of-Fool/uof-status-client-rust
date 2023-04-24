@@ -1,5 +1,11 @@
 # UOF/ustatc-rust
 
+[![GitHub](https://img.shields.io/github/license/University-Of-Fool/uof-status-client-rust?style=for-the-badge)](https://opensource.org/license/mit/)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/University-Of-Fool/uof-status-client-rust/rust.yml?style=for-the-badge)](https://github.com/University-Of-Fool/uof-status-client-rust/actions/workflows/rust.yml)
+[![Bitbucket open issues](https://img.shields.io/bitbucket/issues/University-Of-Fool/uof-status-client-rust?style=for-the-badge)](https://github.com/University-Of-Fool/uof-status-client-rust/issues)
+[![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr/University-Of-Fool/uof-status-client-rust?style=for-the-badge)](https://github.com/University-Of-Fool/uof-status-client-rust/pulls)
+[![GitHub all releases](https://img.shields.io/github/downloads/University-Of-Fool/uof-status-client-rust/total?style=for-the-badge)](https://github.com/University-Of-Fool/uof-status-client-rust/releases/latest)
+
 一个用 Rust 编写的 [uof-status](https://github.com/University-Of-Fool/uof-status) 客户端。
 
 # 使用方法
