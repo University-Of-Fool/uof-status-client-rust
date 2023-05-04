@@ -12,7 +12,7 @@ extern crate clap;
 extern crate log;
 
 #[derive(Parser)]
-#[command(name = "uof-status")]
+#[command(name = "ustatc")]
 #[command(author = "UrsusFeline <ursusfeline07@gmail.com>")]
 #[command(version = "0.1.0")]
 #[command(about = "A client of uof-status written in rust", long_about = None)]
