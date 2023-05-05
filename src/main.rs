@@ -291,8 +291,11 @@ async fn main() {
                         println!(
                             "{}",
                             v.replace("\"", " ")
-                                .replace("},{", "\n\n")
-                                .replace(",", "\n")
+                                .replace("},{ id", "\n\n id")
+                                .replace("id :", "id : ")
+                                .replace(", name", "\n name")
+                                .replace(", token", "\n token")
+                                .replace(", description", "\n description")
                                 .replace("[{", "")
                                 .replace("}]", "")
                                 .yellow()
